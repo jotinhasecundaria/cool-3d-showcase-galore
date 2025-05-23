@@ -4,32 +4,45 @@ import { useFrame } from '@react-three/fiber';
 import { Points, BufferGeometry } from 'three';
 import * as THREE from 'three';
 
-const ParticleField = () => {
+interface ParticleFieldProps {
+  count?: number;
+}
+
+const ParticleField = ({ count = 1500 }: ParticleFieldProps) => {
   const pointsRef = useRef<Points>(null);
   
   const particlesGeometry = useMemo(() => {
     const geometry = new BufferGeometry();
-    const particleCount = 1000;
-    const positions = new Float32Array(particleCount * 3);
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
     
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+    for (let i = 0; i < count; i++) {
+      // Posições mais espalhadas
+      positions[i * 3] = (Math.random() - 0.5) * 30;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
+      
+      // Cores variadas
+      const color = new THREE.Color();
+      color.setHSL(Math.random() * 0.3 + 0.5, 0.7, 0.6); // Tons azuis/roxos
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
     }
     
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     return geometry;
-  }, []);
+  }, [count]);
 
   useFrame((state) => {
     if (pointsRef.current) {
-      pointsRef.current.rotation.x += 0.001;
-      pointsRef.current.rotation.y += 0.002;
+      pointsRef.current.rotation.x += 0.0005;
+      pointsRef.current.rotation.y += 0.001;
       
       const positions = pointsRef.current.geometry.attributes.position.array as Float32Array;
-      for (let i = 1; i < positions.length; i += 3) {
-        positions[i] += Math.sin(state.clock.elapsedTime + positions[i]) * 0.001;
+      for (let i = 0; i < positions.length; i += 3) {
+        positions[i + 1] += Math.sin(state.clock.elapsedTime * 0.5 + positions[i]) * 0.0008;
       }
       pointsRef.current.geometry.attributes.position.needsUpdate = true;
     }
@@ -38,11 +51,12 @@ const ParticleField = () => {
   return (
     <points ref={pointsRef} geometry={particlesGeometry}>
       <pointsMaterial 
-        color="#ffffff"
-        size={0.02}
+        size={0.015}
         transparent
-        opacity={0.6}
+        opacity={0.8}
         sizeAttenuation
+        vertexColors
+        blending={THREE.AdditiveBlending}
       />
     </points>
   );

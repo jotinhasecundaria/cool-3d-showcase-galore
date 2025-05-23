@@ -12,21 +12,26 @@ const AnimatedTorus = ({ position }: AnimatedTorusProps) => {
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x += 0.01;
-      meshRef.current.rotation.y += 0.02;
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime) * 0.3;
+      meshRef.current.rotation.x += 0.008;
+      meshRef.current.rotation.y += 0.012;
+      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.8) * 0.4;
+      meshRef.current.position.x = position[0] + Math.cos(state.clock.elapsedTime * 0.3) * 0.2;
     }
   });
 
   return (
-    <mesh ref={meshRef} position={position}>
-      <torusGeometry args={[1.5, 0.5, 16, 100]} />
-      <meshStandardMaterial 
+    <mesh ref={meshRef} position={position} castShadow receiveShadow>
+      <torusGeometry args={[1.8, 0.6, 20, 100]} />
+      <meshPhysicalMaterial 
         color="#ff6b6b"
-        metalness={0.8}
-        roughness={0.2}
-        emissive="#ff6b6b"
-        emissiveIntensity={0.1}
+        metalness={0.9}
+        roughness={0.1}
+        emissive="#ff3333"
+        emissiveIntensity={0.2}
+        clearcoat={1}
+        clearcoatRoughness={0.1}
+        transmission={0.1}
+        thickness={0.5}
       />
     </mesh>
   );
