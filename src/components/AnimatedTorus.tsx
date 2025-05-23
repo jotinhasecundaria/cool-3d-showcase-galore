@@ -24,10 +24,10 @@ const AnimatedTorus = ({ position }: AnimatedTorusProps) => {
       <torusGeometry args={[1.8, 0.6, 20, 100]} />
       <meshPhysicalMaterial 
         color="#ff6b6b"
-        metalness={0.9}
-        roughness={0.1}
+        metalness={1}
+        roughness={0.2}
         emissive="#9c97e0"
-        emissiveIntensity={0.2}
+        emissiveIntensity={0.8}
         clearcoat={1}
         clearcoatRoughness={0.1}
         transmission={0.1}
