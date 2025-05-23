@@ -26,7 +26,7 @@ const AnimatedTorus = ({ position }: AnimatedTorusProps) => {
         color="#ff6b6b"
         metalness={0.9}
         roughness={0.1}
-        emissive="#ff3333"
+        emissive="#9c97e0"
         emissiveIntensity={0.2}
         clearcoat={1}
         clearcoatRoughness={0.1}

@@ -1,7 +1,6 @@
-
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Mesh } from 'three';
+import { Mesh, Color, MathUtils } from 'three';
 
 interface InteractiveSphereProps {
   position: [number, number, number];
@@ -12,19 +11,55 @@ const InteractiveSphere = ({ position }: InteractiveSphereProps) => {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  useFrame((state) => {
+  // Refs para animações suaves
+  const hoverScaleFactor = useRef(1);
+  const currentColor = useRef(new Color("#45b7d1"));
+  const currentEmissive = useRef(new Color("#000000"));
+  const currentEmissiveIntensity = useRef(0);
+
+  useFrame((state, delta) => {
     if (meshRef.current) {
+      // Animações de rotação
       meshRef.current.rotation.x += 0.004;
       meshRef.current.rotation.z += 0.008;
-      
-      // Efeito de pulsação mais suave quando clicado
-      const scale = clicked ? 1 + Math.sin(state.clock.elapsedTime * 4) * 0.15 : 1;
-      const hoverScale = hovered ? 1.3 : 1;
-      meshRef.current.scale.setScalar(scale * hoverScale);
-      
+
+      // Transição de escala ao passar o mouse
+      const targetHoverScale = hovered ? 1.1 : 1;
+      hoverScaleFactor.current = MathUtils.lerp(
+        hoverScaleFactor.current,
+        targetHoverScale,
+        5 * delta
+      );
+
+      // Efeito de pulsação quando clicado
+      const pulseScale = clicked ? 1 + Math.sin(state.clock.elapsedTime * 4) * 0.15 : 1;
+      const totalScale = pulseScale * hoverScaleFactor.current;
+      meshRef.current.scale.setScalar(totalScale);
+
       // Movimento orbital suave
       meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.6) * 0.3;
       meshRef.current.position.z = position[2] + Math.cos(state.clock.elapsedTime * 0.4) * 0.2;
+
+      // Transições de cor
+      const targetColor = new Color(hovered ? "#4ecdc4" : "#45b7d1");
+      currentColor.current.lerp(targetColor, 5 * delta);
+
+      // Transições de emissividade
+      const targetEmissive = new Color(clicked ? "#4ecdc4" : "#4e4e4e");
+      currentEmissive.current.lerp(targetEmissive, 5 * delta);
+
+      // Intensidade da emissividade
+      const targetEmissiveIntensity = clicked ? 0.3 : 0;
+      currentEmissiveIntensity.current = MathUtils.lerp(
+        currentEmissiveIntensity.current,
+        targetEmissiveIntensity,
+        5 * delta
+      );
+
+      // Aplicar valores ao material
+      meshRef.current.material.color.copy(currentColor.current);
+      meshRef.current.material.emissive.copy(currentEmissive.current);
+      meshRef.current.material.emissiveIntensity = currentEmissiveIntensity.current;
     }
   });
 
@@ -40,15 +75,12 @@ const InteractiveSphere = ({ position }: InteractiveSphereProps) => {
     >
       <dodecahedronGeometry args={[1.2, 2]} />
       <meshPhysicalMaterial 
-        color={hovered ? "#4ecdc4" : "#45b7d1"}
-        metalness={0.95}
+        metalness={1}
         roughness={0.05}
-        emissive={clicked ? "#4ecdc4" : "#000000"}
-        emissiveIntensity={clicked ? 0.3 : 0}
         clearcoat={1}
         clearcoatRoughness={0.1}
-        transmission={0.2}
-        thickness={1}
+        transmission={0.5}
+        thickness={1.5}
         envMapIntensity={1.5}
       />
     </mesh>

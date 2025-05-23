@@ -23,7 +23,7 @@ const Interface3D = ({ onSettingsChange }: Interface3DProps) => {
   }, [autoRotate, rotationSpeed, particleCount, onSettingsChange]);
 
   return (
-    <Card className="absolute top-4 right-4 w-64 bg-slate-900/90 backdrop-blur-xl border-white/10 text-white shadow-xl rounded-lg">
+    <Card className="absolute bottom-20 left-4 w-64 bg-slate-900/50 backdrop-blur-xl border-white/10 text-white shadow-xl rounded-lg">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2 text-blue-400">
           <Settings className="w-4 h-4" />
