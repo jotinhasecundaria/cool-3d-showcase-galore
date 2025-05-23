@@ -30,18 +30,18 @@ const Scene3D = ({ settings }: Scene3DProps) => {
       >
         <Suspense fallback={null}>
           {/* Iluminação aprimorada */}
-          <ambientLight intensity={0.3} color="#4f46e5" />
-          <pointLight position={[10, 10, 10]} intensity={1.2} color="#ffffff" castShadow />
-          <pointLight position={[-10, -10, 5]} intensity={0.8} color="#06b6d4" />
+          <ambientLight intensity={0.4} color="#4f46e5" />
+          <pointLight position={[10, 10, 10]} intensity={1.5} color="#ffffff" castShadow />
+          <pointLight position={[-10, -10, 5]} intensity={1.0} color="#06b6d4" />
           <spotLight 
             position={[0, 15, 0]} 
             angle={0.4} 
             penumbra={1} 
-            intensity={1.5} 
+            intensity={2.0} 
             color="#8b5cf6" 
             castShadow 
           />
-          <directionalLight position={[5, 5, 5]} intensity={0.5} color="#f59e0b" />
+          <directionalLight position={[5, 5, 5]} intensity={0.8} color="#f59e0b" />
           
           {/* Ambiente HDR */}
           <Environment preset="night" />
@@ -72,7 +72,7 @@ const Scene3D = ({ settings }: Scene3DProps) => {
             <FloatingCubes />
           </Float>
           
-          {/* Novas formas divertidas */}
+          {/* Formas divertidas melhoradas */}
           <Float speed={1.5} rotationIntensity={0.6} floatIntensity={1.0}>
             <FunShapes />
           </Float>
@@ -80,30 +80,6 @@ const Scene3D = ({ settings }: Scene3DProps) => {
           <ParticleField count={settings?.particleCount ?? 1500} />
         </Suspense>
       </Canvas>
-      
-      {/* Interface de controle redesenhada */}
-      <div className="absolute top-4 left-4 bg-gradient-to-br from-slate-900/40 to-slate-800/30 backdrop-blur-xl rounded-2xl p-4 lg:p-6 text-white border border-white/10 shadow-2xl max-w-xs">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full animate-pulse"></div>
-          <h3 className="text-lg lg:text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Controles 3D
-          </h3>
-        </div>
-        <ul className="text-sm lg:text-base space-y-2 text-slate-200">
-          <li className="flex items-center gap-2">
-            <span className="text-blue-400">🖱️</span>
-            <span>Arrastar para rotacionar</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="text-purple-400">🎯</span>
-            <span>Scroll para zoom</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="text-green-400">✨</span>
-            <span>Auto-rotação ativa</span>
-          </li>
-        </ul>
-      </div>
     </div>
   );
 };
