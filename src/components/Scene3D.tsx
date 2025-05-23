@@ -1,6 +1,6 @@
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, Float, Text3D, Center } from '@react-three/drei';
+import { OrbitControls, Environment, Float } from '@react-three/drei';
 import { Suspense } from 'react';
 import AnimatedTorus from './AnimatedTorus';
 import InteractiveSphere from './InteractiveSphere';
@@ -44,21 +44,6 @@ const Scene3D = () => {
           
           <FloatingCubes />
           <ParticleField />
-          
-          {/* Texto 3D */}
-          <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
-            <Center position={[0, -3, 0]}>
-              <Text3D
-                font="/fonts/helvetiker_regular.typeface.json"
-                size={0.8}
-                height={0.1}
-                curveSegments={12}
-              >
-                Modelos 3D
-                <meshStandardMaterial color="#00f2fe" metalness={0.8} roughness={0.2} />
-              </Text3D>
-            </Center>
-          </Float>
         </Suspense>
       </Canvas>
       
