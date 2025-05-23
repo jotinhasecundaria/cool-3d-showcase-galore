@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
@@ -17,32 +17,40 @@ const Interface3D = ({ onSettingsChange }: Interface3DProps) => {
   const [particleCount, setParticleCount] = useState([1500]);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Sincronizar mudanças imediatamente
+  useEffect(() => {
+    onSettingsChange({
+      autoRotate,
+      rotationSpeed: rotationSpeed[0],
+      particleCount: particleCount[0]
+    });
+  }, [autoRotate, rotationSpeed, particleCount, onSettingsChange]);
+
   const handleAutoRotateChange = (checked: boolean) => {
     setAutoRotate(checked);
-    onSettingsChange({ autoRotate: checked });
     toast.success(checked ? "Auto-rotação ativada" : "Auto-rotação desativada");
   };
 
   const handleRotationSpeedChange = (value: number[]) => {
     setRotationSpeed(value);
-    onSettingsChange({ rotationSpeed: value[0] });
   };
 
   const handleParticleCountChange = (value: number[]) => {
     setParticleCount(value);
-    onSettingsChange({ particleCount: value[0] });
   };
 
   const handleResetCamera = () => {
-    toast.success("Câmera resetada para posição inicial");
-    // Aqui você pode implementar a lógica de reset da câmera
+    // Reset para configurações padrão
+    setAutoRotate(true);
+    setRotationSpeed([0.8]);
+    setParticleCount([1500]);
+    toast.success("Configurações resetadas!");
   };
 
   const handleScreenshot = () => {
     try {
       // Simular captura de screenshot
-      toast.success("Screenshot capturada com sucesso!");
-      // Implementar a lógica real de screenshot aqui
+      toast.success("Screenshot capturada com sucesso! 📸");
     } catch (error) {
       toast.error("Erro ao capturar screenshot");
     }

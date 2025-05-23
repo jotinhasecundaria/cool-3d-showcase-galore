@@ -6,6 +6,7 @@ import AnimatedTorus from './AnimatedTorus';
 import InteractiveSphere from './InteractiveSphere';
 import FloatingCubes from './FloatingCubes';
 import ParticleField from './ParticleField';
+import FunShapes from './FunShapes';
 
 interface Scene3DProps {
   settings?: {
@@ -69,6 +70,11 @@ const Scene3D = ({ settings }: Scene3DProps) => {
           
           <Float speed={1.2} rotationIntensity={0.4} floatIntensity={0.8}>
             <FloatingCubes />
+          </Float>
+          
+          {/* Novas formas divertidas */}
+          <Float speed={1.5} rotationIntensity={0.6} floatIntensity={1.0}>
+            <FunShapes />
           </Float>
           
           <ParticleField count={settings?.particleCount ?? 1500} />
